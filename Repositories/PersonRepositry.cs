@@ -41,7 +41,7 @@ namespace dcarrascoT5.Repositories
             catch (Exception ex)
             {
 
-                StatusMessage = string.Format("Error" + ex.Message);
+                StatusMessage = string.Format("Error: " + ex.Message);
             }
         }
 
@@ -68,6 +68,27 @@ namespace dcarrascoT5.Repositories
                 int result = _conn.Delete<Persona>(id);
                 StatusMessage = result > 0
                     ? "Persona eliminada"
+                    : "No se encontró la persona";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = "Error: " + ex.Message;
+            }
+        }
+
+        public void UpdatePerson(Persona persona)
+        {
+            try
+            {
+                Init();
+
+                if (persona == null || string.IsNullOrWhiteSpace(persona.Name))
+                    throw new Exception("El nombre es requerido");
+
+                int result = _conn.Update(persona);
+
+                StatusMessage = result > 0
+                    ? "Persona actualizada"
                     : "No se encontró la persona";
             }
             catch (Exception ex)
